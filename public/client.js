@@ -29,7 +29,9 @@ form.addEventListener("submit", (e) => {
 // Mesajları alma ve ekrana yazma
 socket.on("chat message", (msg) => {
     const item = document.createElement("li");
+    item.classList.add("message"); // Sınıf eklendi
     item.innerHTML = `<strong>${msg.name} [${msg.timestamp}]:</strong> ${msg.text}`;
     messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
 });
+
