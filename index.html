@@ -95,6 +95,16 @@
 </head>
 <body>
 
+<!-- Kullanıcı adı modal -->
+<div id="usernameModal" class="modal">
+  <div class="modal-content">
+    <h2>Hoşgeldiniz!</h2>
+    <p>Lütfen kullanıcı adınızı girin:</p>
+    <input type="text" id="usernameInput" placeholder="Kullanıcı adı">
+    <button id="usernameBtn">Başla</button>
+  </div>
+</div>
+
 <!-- Kullanıcı adı popup -->
 <div id="popup">
     <div class="popup-box">
@@ -160,6 +170,8 @@
         if (e.key === "Enter") sendMsg();
     });
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/client.js"></script>
 
 </body>
 </html>
