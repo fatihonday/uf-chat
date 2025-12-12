@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>UF!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Kullanıcı adı modal -->
+    <div id="usernameModal" class="modal">
+        <div class="modal-content">
+            <h2>UF! Chat</h2>
+            <p>Kullanıcı adınızı girin:</p>
+            <input type="text" id="usernameInput" placeholder="Örn: fatih">
+            <button id="usernameBtn">Giriş Yap</button>
+        </div>
+    </div>
+
+    <!-- Chat container -->
+    <div class="chat-container">
+
+        <div class="header">
+            <h2>UF! Sohbet</h2>
+        </div>
+
+        <ul id="messages" class="messages"></ul>
+
+        <form id="form" class="input-area">
+            <input id="input" autocomplete="off" placeholder="Mesaj yaz..." />
+            <button>Gönder</button>
+        </form>
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

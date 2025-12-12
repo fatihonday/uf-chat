@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>UF! Chat</title>
+
+    <style>
+        body {
+            background: #121420;
+            color: white;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #messages {
+            list-style: none;
+            padding: 10px;
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        #messages li {
+            background: #1e2230;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #4c6fff;
+        }
+
+        .time {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .input-area {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            background: #0b0d14;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4c6fff;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Popup */
+        #popup {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-box {
+            background: #1e2230;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .popup-box input {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: none;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- Kullanıcı adı popup -->
+<div id="popup">
+    <div class="popup-box">
+        <h2>Kullanıcı adınız nedir?</h2>
+        <input id="usernameInput" type="text" placeholder="Örn: Fatih">
+        <button onclick="saveUsername()">Giriş Yap</button>
+    </div>
+</div>
+
+<ul id="messages"></ul>
+
+<div class="input-area">
+    <input id="m" autocomplete="off" placeholder="Mesaj yaz...">
+    <button onclick="sendMsg()">Gönder</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    var username = "";
+
+    function saveUsername() {
+        const input = document.getElementById("usernameInput");
+        if (input.value.trim() === "") return;
+
+        username = input.value.trim();
+        document.getElementById("popup").style.display = "none";
+    }
+
+    function sendMsg() {
+        let msg = document.getElementById("m").value;
+        if (msg.trim() === "") return;
+
+        let now = new Date();
+        let time = now.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+        let date = now.toLocaleDateString("tr-TR");
+
+        socket.emit("chat message", {
+            username: username,
+            text: msg,
+            date: date,
+            time: time
+        });
+
+        document.getElementById("m").value = "";
+    }
+
+    socket.on("chat message", (data) => {
+        let li = document.createElement("li");
+
+        li.innerHTML = `
+            <span class="username">${data.username}</span>:
+            ${data.text}
+            <br>
+            <span class="time">${data.date} - ${data.time}</span>
+        `;
+
+        document.getElementById("messages").appendChild(li);
+    });
+
+    // ENTER ile gönder
+    document.getElementById("m").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMsg();
+    });
+</script>
+
+</body>
+</html>
